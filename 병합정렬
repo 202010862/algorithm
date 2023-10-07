@@ -1,0 +1,66 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+
+void merge(int ls, int le, int rs, int re, int arr[])
+{
+	int lptr = ls;
+	int rptr = rs;
+	int bptr = 0;
+	int* b = (int*)calloc((le - ls) + (re - rs) + 2, sizeof(int));
+	while (lptr <= le && rptr <= re)
+	{
+		if (arr[lptr] < arr[rptr])
+		{
+			b[bptr++] = arr[lptr++];
+		}
+		else
+		{
+			b[bptr++] = arr[rptr++];
+		}
+	}
+	if (lptr > le)
+	{
+		for (int i = rptr; i <= re; i++)
+		{
+			b[bptr++] = arr[i];
+		}
+	}
+	else
+	{
+		for (int i = lptr; i <= le; i++)
+		{
+			b[bptr++] = arr[i];
+		}
+	}
+	for (int i = 0; i < re-ls+1; i++)
+	{
+		arr[i+ls] = b[i];
+	}
+	free(b);
+}
+
+void msort(int s, int e, int arr[])
+{
+	if (s == e)
+	{
+		return;
+	}
+	int m = (s + e) / 2;
+	msort(s, m, arr);
+	msort(m+1, e, arr);
+	merge(s, m, m + 1, e, arr);
+
+}
+
+
+int main()
+{
+	int arr[] = { 16,12,5,38,19,4,20,27 };
+	int len = sizeof(arr) / sizeof(int)-1;
+	msort(0, len, arr);
+	for (int i = 0; i <= len; i++)
+	{
+		printf("%d ", arr[i]);
+	}
+}
